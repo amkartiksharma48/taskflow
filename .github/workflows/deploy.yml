@@ -43,5 +43,6 @@ jobs:
             cd ~/taskflow
             docker pull ${{ secrets.DOCKER_USERNAME }}/taskflow-backend:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/taskflow-frontend:latest
-            docker-compose down
-            docker-compose up -d
+            docker compose down
+            docker compose up -d
+  
