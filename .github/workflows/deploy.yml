@@ -43,6 +43,25 @@ jobs:
             cd ~/taskflow
             docker pull ${{ secrets.DOCKER_USERNAME }}/taskflow-backend:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/taskflow-frontend:latest
-            docker compose down
+            docker compose down || true
+            cat > docker-compose.yml << 'COMPOSEEOF'
+            version: "3.8"
+            services:
+              backend:
+                image: kartiksharma48/taskflow-backend:latest
+                container_name: taskflow-backend
+                ports:
+                  - "5000:5000"
+                env_file:
+                  - .env
+                restart: unless-stopped
+              frontend:
+                image: kartiksharma48/taskflow-frontend:latest
+                container_name: taskflow-frontend
+                ports:
+                  - "3000:80"
+                depends_on:
+                  - backend
+                restart: unless-stopped
+            COMPOSEEOF
             docker compose up -d
-  
